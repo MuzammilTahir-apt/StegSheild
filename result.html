@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        StegShield - Detection Result
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            SS
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                StegShield
+            </div>
+
+            <div class="brand-tag">
+                AI Steganography Detection
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-badge">
+
+        <span class="dot"></span>
+
+        Analysis Complete
+
+    </div>
+
+</nav>
+
+
+<main class="page result-page">
+
+    <section class="result-shell">
+
+        <div class="verdict-card">
+
+            <div class="verdict-top">
+
+                <div
+                    class="verdict-icon-wrap {% if classification == 'STEGO' %}stego{% else %}clean{% endif %}"
+                >
+
+                    {% if classification == 'STEGO' %}
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            d="M12 9v4M12 17h.01M10.3 3.9L2.4 18a1.8 1.8 0 001.5 2.7h16.2a1.8 1.8 0 001.5 0L13.7 3.9a1.8 1.8 0 00-3.4 0z"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                    {% else %}
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            d="M9 12l2 2 4-4M12 3l8 4v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V7l8-4z"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <p
+                        class="verdict-text-title {% if classification == 'STEGO' %}stego{% else %}clean{% endif %}"
+                    >
+
+                        {% if classification == 'STEGO' %}
+
+                            Stego Image Detected
+
+                        {% else %}
+
+                            Clean Image
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <p class="verdict-text-sub">
+
+                        {% if classification == 'STEGO' %}
+
+                            The model detected possible hidden
+                            information embedded inside this image.
+
+                        {% else %}
+
+                            The model did not detect
+                            steganographic content in this image.
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-grid">
+
+
+                <!-- IMAGE -->
+
+                <div class="image-preview-card">
+
+                    <div class="card-heading">
+                        ANALYZED IMAGE
+                    </div>
+
+
+                    {% if image_url %}
+
+                    <img
+                        src="{{ image_url }}"
+                        class="result-image"
+                        alt="Analyzed image"
+                    >
+
+                    {% else %}
+
+                    <div class="image-error">
+                        Image preview unavailable
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="image-name">
+                        {{ filename }}
+                    </div>
+
+                </div>
+
+
+                <!-- ANALYSIS -->
+
+                <div class="analysis-panel">
+
+                    <div class="confidence-row">
+
+                        <div class="confidence-ring-wrap">
+
+                            <svg viewBox="0 0 110 110">
+
+                                <circle
+                                    class="ring-bg"
+                                    cx="55"
+                                    cy="55"
+                                    r="46"
+                                ></circle>
+
+                                <circle
+                                    class="ring-fill"
+                                    id="ringFill"
+                                    cx="55"
+                                    cy="55"
+                                    r="46"
+                                    data-confidence="{{ confidence }}"
+                                ></circle>
+
+                            </svg>
+
+
+                            <div class="confidence-ring-value">
+
+                                {{ "%.0f"|format(confidence) }}%
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="confidence-label-block">
+
+                            <p class="confidence-label-title">
+                                Model Confidence
+                            </p>
+
+                            <p class="confidence-label-desc">
+
+                                StegShield is
+
+                                <strong>
+                                    {{ "%.2f"|format(confidence) }}%
+                                </strong>
+
+                                confident in this classification.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="probabilities">
+
+                        <div class="probability-title">
+                            MODEL PROBABILITIES
+                        </div>
+
+
+                        <div class="probability-item">
+
+                            <div class="probability-label">
+
+                                <span>
+                                    Steganography
+                                </span>
+
+                                <strong>
+                                    {{ "%.2f"|format(stego_prob) }}%
+                                </strong>
+
+                            </div>
+
+                            <div class="probability-bar">
+
+                                <div
+                                    class="probability-fill stego-fill"
+                                    data-width="{{ stego_prob }}"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="probability-item">
+
+                            <div class="probability-label">
+
+                                <span>
+                                    Clean Image
+                                </span>
+
+                                <strong>
+                                    {{ "%.2f"|format(clean_prob) }}%
+                                </strong>
+
+                            </div>
+
+                            <div class="probability-bar">
+
+                                <div
+                                    class="probability-fill clean-fill"
+                                    data-width="{{ clean_prob }}"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p class="report-section-title">
+                Detection Report
+            </p>
+
+
+            <div class="report-table">
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        Report ID
+                    </span>
+
+                    <span class="report-value">
+                        {{ report_id }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        Date &amp; Time
+                    </span>
+
+                    <span class="report-value">
+                        {{ timestamp }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        File Name
+                    </span>
+
+                    <span class="report-value">
+                        {{ filename }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        File Size
+                    </span>
+
+                    <span class="report-value">
+                        {{ file_size }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        Image Dimensions
+                    </span>
+
+                    <span class="report-value">
+                        {{ image_width }} × {{ image_height }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        AI Model
+                    </span>
+
+                    <span class="report-value">
+                        ResNet18
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        Threat Level
+                    </span>
+
+                    <span
+                        class="report-value threat-{{ threat_level|lower }}"
+                    >
+                        {{ threat_level }}
+                    </span>
+
+                </div>
+
+
+                <div class="report-row">
+
+                    <span class="report-label">
+                        Verdict
+                    </span>
+
+                    <span class="report-value">
+                        {{ classification }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions-row">
+
+                <a
+                    href="{{ url_for('download_report') }}"
+                    class="btn-primary"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                    Download PDF Report
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('report_page') }}"
+                    class="btn-secondary"
+                >
+                    View Full Report
+                </a>
+
+
+                <a
+                    href="{{ url_for('index') }}"
+                    class="btn-secondary"
+                >
+
+                    Test Another Image
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        StegShield &bull;
+        ResNet18 Image Classification &bull;
+        Final Year Project
+    </p>
+
+</footer>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        StegShield - AI Steganography Detection
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            SS
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                StegShield
+            </div>
+
+            <div class="brand-tag">
+                AI Steganography Detection
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-badge">
+
+        <span class="dot"></span>
+
+        AI Engine Online
+
+    </div>
+
+</nav>
+
+
+<main class="page">
+
+    <div class="hero">
+
+        <span class="eyebrow">
+            AI-POWERED STEGANOGRAPHY DETECTION
+        </span>
+
+        <h1>
+            Detect Hidden Data
+            <br>
+
+            <span class="accent-text">
+                Before It Becomes a Threat.
+            </span>
+        </h1>
+
+        <p class="hero-sub">
+
+            Upload an image and let StegShield analyze it
+            using an AI-powered ResNet18 security model.
+
+        </p>
+
+    </div>
+
+
+    <div class="radar-container">
+
+        <div class="radar">
+
+            <div class="radar-grid"></div>
+
+            <div class="radar-scanner"></div>
+
+            <div class="radar-center"></div>
+
+            <span class="radar-dot one"></span>
+            <span class="radar-dot two"></span>
+            <span class="radar-dot three"></span>
+
+        </div>
+
+    </div>
+
+
+    <div class="upload-card">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="uploadForm"
+        >
+
+            <label
+                class="dropzone"
+                id="dropzone"
+                for="fileInput"
+            >
+
+                <svg
+                    class="dropzone-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                >
+
+                    <path
+                        d="M12 16V4M12 4L7 9M12 4l5 5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <path
+                        d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+
+
+                <p class="dropzone-title">
+                    Drag &amp; drop an image here
+                </p>
+
+                <p class="dropzone-text">
+                    or click below to
+                    <strong>browse your files</strong>
+                </p>
+
+
+                <span class="browse-btn">
+                    Choose Image
+                </span>
+
+
+                <input
+                    type="file"
+                    name="image"
+                    id="fileInput"
+                    accept="image/*"
+                    required
+                >
+
+
+                <div
+                    class="preview-wrap"
+                    id="previewWrap"
+                >
+
+                    <img
+                        class="preview-thumb"
+                        id="previewThumb"
+                        alt="Preview"
+                    >
+
+                    <div class="file-meta">
+
+                        <span id="fileName"></span>
+
+                        <span id="fileSize"></span>
+
+                    </div>
+
+                </div>
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="analyze-button"
+                id="analyzeBtn"
+            >
+
+                <span class="spinner"></span>
+
+                <span id="analyzeBtnText">
+                    Analyze Image
+                </span>
+
+            </button>
+
+        </form>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="features">
+
+        <div class="feature-chip">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+
+                <path
+                    d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+
+            </svg>
+
+            Real-Time Analysis
+
+        </div>
+
+
+        <div class="feature-chip">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+
+                <path
+                    d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+
+            </svg>
+
+            ResNet18 Powered
+
+        </div>
+
+
+        <div class="feature-chip">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+
+                <path
+                    d="M9 12l2 2 4-4M12 3l8 4v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V7l8-4z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+
+            </svg>
+
+            Downloadable Reports
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        StegShield &bull;
+        ResNet18 Image Classification &bull;
+        Final Year Project
+    </p>
+
+</footer>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+
+</html>
